@@ -1,38 +1,44 @@
 <?php
 
+use App\Models\Greeting;
 use Illuminate\Support\Facades\Route;
-use App\Greeting;
-use Illuminate\Http\Request;
-
-use App\Http\Controllers\Controller;
 
 //Example 1.3.
 
-// Определение маршрута с использованием контроллера
-Route::get('/create-greeting', [GreetingController::class, 'create']);
+Route::get('create-greeting', function () {
 
-// Обработка маршрута в контроллере
-class GreetingController extends Controller
-{
-    public function create(Request $request)
-    {
-        // Создаем новый экземпляр модели Greeting
-        $greeting = new Greeting();
+        $greeting = new Greeting;
 
         // Устанавливаем значение атрибута body из запроса или из статического значения
-        $greeting->body = $request->input('body', 'Hello World');
+        $greeting->body = 'Hello, World!';
 
-        // Сохраняем модель в базе данных
+
+    // Сохраняем модель в базе данных
         $greeting->save();
 
         // Возвращаем сообщение об успешном создании
         return 'Greeting created successfully!';
-    }
-}
-
+});
 
 Route::get('first-greeting', function(){
     return Greeting::first()->body;
+});
+
+Route::get('delete-greeting/{id}', function ($id) {
+    // Находим модель Greeting по идентификатору
+    $greeting = Greeting::find($id);
+
+    // Проверяем, существует ли модель
+    if ($greeting) {
+        // Если модель существует, вызываем метод delete() для удаления записи из базы данных
+        $greeting->delete();
+
+        // Возвращаем сообщение об успешном удалении
+        return 'Greeting deleted successfully!';
+    } else {
+        // Если модель не найдена, возвращаем сообщение об ошибке
+        return 'Greeting not found!';
+    }
 });
 
 
