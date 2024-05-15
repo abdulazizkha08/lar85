@@ -8,6 +8,7 @@ class TaskController extends Controller
 {
     public function index()
     {
-        return 'Hello, World! This is TaskController';
+//        return json('string', 'Hello, World! This is TaskController');
+        return view('requirejs_v1');
     }
 }
